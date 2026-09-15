@@ -90,7 +90,7 @@ export default function Layout() {
           navigator.serviceWorker?.ready.then((registration) => {
             registration.showNotification(notification.title, {
               body: notification.message,
-              icon: '/favicon.svg',
+              icon: '/logo.png',
               data: { url: '/', itemId: notification.id },
             });
           });
@@ -109,7 +109,7 @@ export default function Layout() {
         payload.notification?.title || 'Kitchen reminder',
         {
           body: payload.notification?.body || 'You have a new kitchen notification.',
-          icon: '/favicon.svg',
+          icon: '/logo.png',
           data: payload.data || {},
         },
       );

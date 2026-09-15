@@ -189,7 +189,9 @@ export default function Login() {
         </button>
 
         {/* ─── Logo ─── */}
-        <div className="login-mark" aria-hidden="true">B</div>
+        <div className="login-mark" aria-hidden="true">
+          <img src="/logo.png" alt="" />
+        </div>
 
         {/* ─── Title ─── */}
         <h1 id="login-title" className="login-heading" style={headingStyle}>

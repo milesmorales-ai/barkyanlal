@@ -20,7 +20,7 @@ self.addEventListener('message', (event) => {
     setTimeout(() => {
       self.registration.showNotification(data.title || 'Kitchen test alert', {
         body: data.body || 'This is a test reminder from your kitchen app.',
-        icon: '/favicon.svg',
+        icon: '/logo.png',
         tag: 'debug-test-notification',
       });
     }, 30000);
@@ -31,7 +31,7 @@ messaging.onBackgroundMessage((payload) => {
   const title = payload.notification?.title || 'Kitchen reminder';
   const options = {
     body: payload.notification?.body || 'You have a new kitchen notification.',
-    icon: '/favicon.svg',
+    icon: '/logo.png',
     data: payload.data || {},
   };
 
