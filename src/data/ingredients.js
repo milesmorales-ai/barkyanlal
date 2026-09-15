@@ -938,18 +938,36 @@ export const getIngredientNameEN = (burmeseName) => {
   return entry ? entry[0] : name;
 };
 
-const INGREDIENT_ALIASES = {
-  'ကြက်သား': 'chicken',
-  'ကြက်ပေါင်': 'chicken',
-  'ကြက်တောင်ပံ': 'chicken',
-  'ကြက်ရင်အုံ': 'chicken',
-  'chicken thigh': 'chicken',
-  'chicken leg': 'chicken',
-  'chicken wing': 'chicken',
-  'chicken breast': 'chicken',
-  'ခရမ်းချဉ်သီး': 'tomato',
-  'tomatoes': 'tomato',
-};
+const INGREDIENT_ALIASES = Object.fromEntries([
+  ['chicken', [
+    'chicken', 'chicken breast', 'chicken thigh', 'chicken wings', 'chicken wing',
+    'chicken drumsticks', 'chicken drumstick', 'whole chicken', 'ground chicken',
+    'chicken liver', 'chicken gizzard', 'ကြက်သား', 'ကြက်ပေါင်', 'ကြက်တောင်ပံ',
+    'ကြက်ခြေထောက်', 'ကြက်တစ်ကောင်', 'ကြက်သားကြိတ်', 'ကြက်အသည်း', 'ကြက်မြစ်',
+  ]],
+  ['beef', [
+    'beef', 'beef steak', 'ground beef', 'beef liver', 'beef ribs', 'beef brisket',
+    'beef chuck', 'beef tenderloin', 'beef sirloin', 'beef shank', 'beef tripe',
+    'အမဲသား', 'အမဲသားစတိတ်', 'အမဲသားကြိတ်', 'အမဲအသည်း', 'အမဲနံရိုး', 'အမဲရင်ဘတ်သား',
+    'အမဲပခုံးသား', 'အမဲမိုးခိုသား', 'အမဲခါးသား', 'အမဲခြေထောက်သား', 'အမဲအူ',
+  ]],
+  ['pork', [
+    'pork', 'pork chop', 'ground pork', 'pork belly', 'pork ribs', 'pork tenderloin',
+    'pork shoulder', 'pork loin', 'pork sausage', 'pork mince', 'ဝက်သား', 'ဝက်သားပြား',
+    'ဝက်သားကြိတ်', 'ဝက်ဗိုက်သား', 'ဝက်နံရိုး', 'ဝက်မိုးခိုသား', 'ဝက်ပခုံးသား', 'ဝက်ခါးသား',
+    'ဝက်အူချောင်း',
+  ]],
+  ['lamb', ['lamb', 'lamb chops', 'lamb shoulder', 'ground lamb', 'သိုးသား', 'သိုးသားပြား', 'သိုးပခုံးသား', 'သိုးသားကြိတ်']],
+  ['duck', ['duck', 'duck breast', 'whole duck', 'ဘဲသား', 'ဘဲရင်အုံ', 'ဘဲတစ်ကောင်']],
+  ['turkey', ['turkey', 'turkey breast', 'ground turkey', 'ကြက်ဆင်သား', 'ကြက်ဆင်ရင်အုံ', 'ကြက်ဆင်သားကြိတ်']],
+  ['fish', ['fish', 'salmon', 'tuna', 'cod', 'tilapia', 'mackerel', 'sardines', 'anchovies', 'trout', 'haddock', 'herring', 'sea bass', 'snapper', 'catfish', 'carp', 'swordfish', 'halibut', 'pollock', 'ငါး', 'ဆော်လမွန်ငါး', 'တူနာငါး', 'ကော့ဒ်ငါး', 'တီလာပီးယားငါး', 'ငါးသေတ္တာ', 'ဆာဒင်းငါး', 'အန်ချိုဗီငါး', 'ထရောက်ငါး', 'ဟက်ဒေါ့ခ်ငါး', 'ဟဲရင်းငါး', 'ပင်လယ်ငါးဘတ်စ်', 'ငါးပါးနီ', 'ငါးခူ', 'ငါးကြင်း', 'ဓားငါး', 'ဟယ်လီဘတ်ငါး', 'ပေါလော့ခ်ငါး']],
+  ['shrimp', ['shrimp', 'prawns', 'ပုစွန်', 'ပုစွန်ကြီး']],
+  ['egg', ['egg', 'eggs', 'chicken eggs', 'egg whites', 'egg yolks', 'ကြက်ဥ', 'ကြက်ဥအကာ', 'ကြက်ဥအနှစ်']],
+  ['tomato', ['tomato', 'tomatoes', 'canned tomatoes', 'tomato paste', 'tomato sauce', 'ခရမ်းချဉ်သီး', 'ခရမ်းချဉ်သီးစည်သွပ်', 'ခရမ်းချဉ်သီးအနှစ်', 'ခရမ်းချဉ်သီးဆော့စ်']],
+  ['onion', ['onion', 'red onion', 'green onion', 'scallion', 'shallot', 'onion powder', 'ကြက်သွန်နီ', 'ကြက်သွန်နီအနီ', 'ကြက်သွန်မြိတ်', 'ကြက်သွန်နီသေး', 'ကြက်သွန်နီမှုန့်']],
+  ['garlic', ['garlic', 'garlic powder', 'ကြက်သွန်ဖြူ', 'ကြက်သွန်ဖြူမှုန့်']],
+  ['mushroom', ['mushroom', 'dried mushrooms', 'enoki mushroom', 'shiitake mushroom', 'oyster mushroom', 'king oyster mushroom', 'မှို', 'အင်နိုကီမှို', 'ရှီတာကီမှို', 'ကမာမှို', 'ကင်းကမာမှို']],
+].flatMap(([canonical, aliases]) => aliases.map((alias) => [alias, canonical])));
 
 export const getCanonicalIngredientName = (value) => {
   const name = getIngredientNameEN(value).toLowerCase().trim();
