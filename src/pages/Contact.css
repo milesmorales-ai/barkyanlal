@@ -1,0 +1,13 @@
+.contact-page { min-height: 100vh; padding: 20px 16px 96px; }
+.contact-header, .contact-card { width: min(100%, 560px); margin: 0 auto; }
+.contact-header { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
+.contact-back { width: 38px; height: 38px; border: 0; border-radius: 50%; background: transparent; color: inherit; cursor: pointer; }
+.contact-eyebrow { margin: 0 0 2px; color: #8d6e3f; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+.contact-header h1 { margin: 0; font-size: 27px; }
+.contact-card { display: grid; gap: 16px; padding: 22px 18px; border: 1px solid; border-radius: 14px; }
+.contact-card label { display: grid; gap: 7px; font-size: 13px; font-weight: 700; }
+.contact-card input, .contact-card select, .contact-card textarea { width: 100%; box-sizing: border-box; padding: 11px 12px; border: 1px solid #d8cbbb; border-radius: 9px; background: transparent; color: inherit; font: inherit; font-size: 14px; }
+.contact-card textarea { resize: vertical; }
+.contact-card button { display: inline-flex; justify-content: center; align-items: center; gap: 8px; padding: 12px; border: 0; border-radius: 9px; background: #8d6e3f; color: #fff; font: inherit; font-weight: 700; cursor: pointer; }
+.contact-card button:disabled { opacity: .6; cursor: not-allowed; }
+.contact-status { margin: 0; color: #2d7d46; font-size: 13px; text-align: center; }
