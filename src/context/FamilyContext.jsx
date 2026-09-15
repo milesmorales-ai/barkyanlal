@@ -23,11 +23,15 @@ export function FamilyProvider({ children }) {
     }
 
     setLoading(true);
-    const { data, error: queryError } = await supabase
+    const familyRequest = supabase
       .from('family_members')
       .select('role, family:families(id, name, invite_code, created_by)')
       .eq('user_id', user.id)
       .maybeSingle();
+    const familyTimeout = new Promise((resolve) => {
+      window.setTimeout(() => resolve({ data: null, error: new Error('Family lookup timed out') }), 8000);
+    });
+    const { data, error: queryError } = await Promise.race([familyRequest, familyTimeout]);
 
     if (queryError) {
       console.error('Could not load family:', queryError);

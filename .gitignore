@@ -28,6 +28,4 @@ dist-ssr
 
 # Local Netlify folder
 .netlify
-
-# Local Supabase CLI metadata
 supabase/.temp

@@ -14,9 +14,11 @@ import EditProfile from './pages/EditProfile';
 import Login from './pages/Login';
 import Legal from './pages/Legal';
 import Contact from './pages/Contact';
+import useScrollToTop from './hooks/useScrollToTop';
 
 function App() {
   const location = useLocation();
+  useScrollToTop();
 
   return (
     <AuthProvider>

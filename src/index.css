@@ -35,6 +35,155 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+.app-header,
+.app-header-actions,
+.app-header-brand,
+.bottom-nav-bar {
+  min-width: 0;
+}
+
+.app-header-brand {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.app-header-actions {
+  flex: 0 1 auto;
+}
+
+.app-header-title {
+  white-space: nowrap;
+}
+
+@media (max-width: 420px) {
+  .app-header {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+    padding-top: max(8px, env(safe-area-inset-top)) !important;
+    padding-bottom: 4px !important;
+  }
+
+  .app-header-user {
+    gap: 3px !important;
+    font-size: 10px !important;
+  }
+
+  .app-header-user svg {
+    font-size: 10px !important;
+  }
+
+  .app-header-user span {
+    max-width: 48px !important;
+    font-size: 10px !important;
+  }
+
+  .app-header-user button {
+    padding: 2px 3px !important;
+    font-size: 12px !important;
+  }
+
+  .app-header-actions {
+    gap: 6px !important;
+  }
+
+  .app-header-title {
+    font-size: 20px !important;
+    letter-spacing: -0.3px !important;
+  }
+
+  .app-header-notifications {
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 11px !important;
+  }
+
+  .app-header-notifications svg {
+    font-size: 15px !important;
+  }
+
+  .app-header-tour {
+    width: 30px !important;
+    height: 30px !important;
+    font-size: 14px !important;
+  }
+
+  .bottom-nav-bar {
+    height: 58px !important;
+  }
+
+  .bottom-nav-bar a {
+    min-width: 0 !important;
+    padding-left: 3px !important;
+    padding-right: 3px !important;
+  }
+
+  .bottom-nav-bar a svg {
+    font-size: 17px !important;
+  }
+
+  .bottom-nav-bar a span {
+    font-size: 9px !important;
+  }
+
+  .bottom-nav-bar a[aria-current="page"] {
+    min-width: 0;
+  }
+}
+
+@media (max-width: 340px) {
+  .app-header {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+    padding-top: max(6px, env(safe-area-inset-top)) !important;
+  }
+
+  .app-header-title {
+    font-size: 20px !important;
+  }
+
+  .app-header-brand p {
+    font-size: 10px !important;
+  }
+
+  .app-header-brand p svg {
+    font-size: 8px !important;
+  }
+
+  .app-header-actions {
+    gap: 4px !important;
+  }
+
+  .app-header-user {
+    display: none !important;
+  }
+
+  .app-header-actions > div {
+    max-width: 74px;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .app-header-actions > div span {
+    max-width: 42px !important;
+    font-size: 10px !important;
+  }
+
+  .app-header-notifications {
+    width: 34px !important;
+    height: 34px !important;
+  }
+
+  .app-header-tour {
+    width: 29px !important;
+    height: 29px !important;
+    font-size: 12px !important;
+  }
+
+  .bottom-nav-bar a span {
+    font-size: 8px !important;
+  }
+}
+
 /* ─── SCROLLBAR STYLING (Cozy warm) ─── */
 ::-webkit-scrollbar {
   width: 6px;

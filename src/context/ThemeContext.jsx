@@ -1,4 +1,6 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useLayoutEffect } from 'react';
+import { useAuth } from './AuthContext';
+import { supabase } from '../services/supabaseClient';
 
 // Color Palette - Cozy Warm Theme
 export const COLORS = {
@@ -131,34 +133,70 @@ export const COLORS = {
 
 const ThemeContext = createContext();
 
-export const ThemeProvider = ({ children }) => {
-  const [theme, setTheme] = useState(() => {
-    const saved = localStorage.getItem('appTheme');
-    if (saved) return saved;
-    // Check system preference
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      return 'dark';
+const getInitialTheme = () => {
+  try {
+    const savedSettings = JSON.parse(localStorage.getItem('appSettings') || 'null');
+    if (savedSettings?.theme === 'light' || savedSettings?.theme === 'dark') {
+      return savedSettings.theme;
     }
-    return 'light';
-  });
+
+    const savedTheme = localStorage.getItem('appTheme');
+    if (savedTheme === 'light' || savedTheme === 'dark') return savedTheme;
+  } catch {
+    // Fall back to the default theme when saved preferences are invalid.
+  }
+
+  return 'light';
+};
+
+const applyDocumentTheme = (nextTheme) => {
+  const isDark = nextTheme === 'dark';
+  if (isDark) {
+    document.documentElement.setAttribute('data-theme', 'dark');
+  } else {
+    document.documentElement.removeAttribute('data-theme');
+  }
+  document.body.style.background = isDark ? COLORS.dark.background : COLORS.light.background;
+  document.body.style.color = isDark ? COLORS.dark.textPrimary : COLORS.light.textPrimary;
+};
+
+export const ThemeProvider = ({ children }) => {
+  const { user, loading: authLoading } = useAuth();
+  const [theme, setTheme] = useState(getInitialTheme);
 
   const [colors, setColors] = useState(COLORS[theme]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     setColors(COLORS[theme]);
     localStorage.setItem('appTheme', theme);
-    
-    // Apply theme to document
-    if (theme === 'dark') {
-      document.documentElement.setAttribute('data-theme', 'dark');
-      document.body.style.background = COLORS.dark.background;
-      document.body.style.color = COLORS.dark.textPrimary;
-    } else {
-      document.documentElement.removeAttribute('data-theme');
-      document.body.style.background = COLORS.light.background;
-      document.body.style.color = COLORS.light.textPrimary;
-    }
+    applyDocumentTheme(theme);
   }, [theme]);
+
+  useEffect(() => {
+    if (authLoading || !user || user.isLocal || !supabase) return undefined;
+
+    let active = true;
+    supabase
+      .from('user_preferences')
+      .select('settings')
+      .eq('user_id', user.id)
+      .maybeSingle()
+      .then(({ data, error }) => {
+        if (error) {
+          console.error('Could not load cloud theme preference:', error);
+          return;
+        }
+
+        const cloudTheme = data?.settings?.theme;
+        if (active && (cloudTheme === 'light' || cloudTheme === 'dark')) {
+          setTheme(cloudTheme);
+        }
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [authLoading, user?.id, user?.isLocal]);
 
   const toggleTheme = () => {
     setTheme(prev => prev === 'light' ? 'dark' : 'light');

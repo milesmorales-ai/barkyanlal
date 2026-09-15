@@ -3,9 +3,24 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#d9c18d" />
+    <meta name="description" content="BarKyanLal kitchen manager for pantry tracking and recipe planning." />
     <title>BarKyanLal - Kitchen Manager</title>
-    <link rel="icon" type="image/png" href="/logo.png" />
-    
+    <link rel="icon" type="image/png" href="/barkyanlallogo.png" />
+    <link rel="apple-touch-icon" href="/barkyanlallogo.png" />
+
+    <script>
+      (() => {
+        try {
+          const settings = JSON.parse(localStorage.getItem('appSettings') || 'null');
+          const savedTheme = settings?.theme === 'light' || settings?.theme === 'dark'
+            ? settings.theme
+            : localStorage.getItem('appTheme');
+          if (savedTheme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+        } catch {}
+      })();
+    </script>
+
     <!-- ─── GOOGLE FONTS ─── -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

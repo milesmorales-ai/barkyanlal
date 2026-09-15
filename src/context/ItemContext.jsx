@@ -92,9 +92,13 @@ export function ItemProvider({ children }) {
       // ─── User is logged in → try Supabase ───
       if (user && supabase && !user.isLocal) {
         try {
-          const { data, error: selectError } = await scopeItems(
+          const itemRequest = scopeItems(
             supabase.from('kitchen_items').select('*')
           ).order('created_at', { ascending: false });
+          const itemTimeout = new Promise((resolve) => {
+            window.setTimeout(() => resolve({ data: null, error: new Error('Inventory lookup timed out') }), 8000);
+          });
+          const { data, error: selectError } = await Promise.race([itemRequest, itemTimeout]);
 
           if (!active) return;
 

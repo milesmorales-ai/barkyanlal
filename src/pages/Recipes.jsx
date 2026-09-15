@@ -150,17 +150,25 @@ export default function Recipes() {
 
   useEffect(() => {
     let active = true;
+    const localSavedRecipes = loadSavedRecipes();
+    if (localSavedRecipes.length > 0) setSavedRecipes(localSavedRecipes);
+
     const loadCloudSavedRecipes = async () => {
       if (!user || user.isLocal) {
-        setSavedRecipes(loadSavedRecipes());
+        setSavedRecipes(localSavedRecipes);
         return;
       }
       if (!supabase) {
-        setSavedRecipes([]);
+        setSavedRecipes(localSavedRecipes);
         return;
       }
       const { data } = await supabase.from('user_preferences').select('settings').eq('user_id', user.id).maybeSingle();
-      if (active) setSavedRecipes(await translateRecipesIfNeeded(data?.settings?.savedRecipes || []));
+      if (active) {
+        const cloudSavedRecipes = data?.settings?.savedRecipes || [];
+        setSavedRecipes(cloudSavedRecipes.length > 0
+          ? await translateRecipesIfNeeded(cloudSavedRecipes)
+          : localSavedRecipes);
+      }
     };
     loadCloudSavedRecipes();
     return () => { active = false; };
@@ -1465,7 +1473,7 @@ export default function Recipes() {
           onClick={() =>
             setActiveTab('recipes')
           }
-          disabled={loading}
+          disabled={loading && activeTab === 'recipes'}
         >
 
           <FontAwesomeIcon
@@ -1494,7 +1502,7 @@ export default function Recipes() {
           onClick={() =>
             setActiveTab('saved')
           }
-          disabled={loading}
+          disabled={loading && activeTab === 'recipes'}
         >
 
           <FontAwesomeIcon
@@ -1991,7 +1999,7 @@ export default function Recipes() {
 
         <>
 
-          {loading && <PageSkeleton colors={colors} showHeading={false} />}
+          {loading && activeTab === 'recipes' && <PageSkeleton colors={colors} showHeading={false} />}
 
 
           {/* RATE LIMITED */}
@@ -2095,7 +2103,7 @@ export default function Recipes() {
           ================================================== */}
 
           {displayRecipes.length > 0 &&
-            !loading && (
+            (activeTab === 'saved' || !loading) && (
 
               <div className="recipes-list">
 

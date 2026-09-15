@@ -11,6 +11,7 @@ import {
   faLeaf,
   faSearch,
   faXmark,
+  faPlus,
   faBox,
   faSmile,
   faListCheck,
@@ -452,7 +453,9 @@ export default function Home() {
           <div className="search-results">
             <div className="search-results-header">
               <span className="search-results-count">
-                {searchResults.length} {t('items')} တွေ့ပါသည်
+                {language === 'mm'
+                  ? `${searchResults.length} ${t('items')} တွေ့ပါသည်`
+                  : `${searchResults.length} ${searchResults.length === 1 ? t('item') : t('items')} found`}
               </span>
               {searchResults.length > 0 && (
                 <button className="search-results-clear" onClick={() => setSearchTerm('')}>

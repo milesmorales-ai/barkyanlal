@@ -46,7 +46,12 @@ export function AuthProvider({ children }) {
 
     let mounted = true;
 
-    supabase.auth.getSession().then(({ data }) => {
+    const sessionRequest = supabase.auth.getSession();
+    const sessionTimeout = new Promise((resolve) => {
+      window.setTimeout(() => resolve({ data: { session: null } }), 8000);
+    });
+
+    Promise.race([sessionRequest, sessionTimeout]).then(({ data }) => {
       if (mounted) {
         setSession(data.session);
         setLoading(false);

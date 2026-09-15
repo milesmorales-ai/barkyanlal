@@ -47,7 +47,7 @@ import LoadingButton from '../components/LoadingButton';
 
 const Settings = () => {
   const { user, isLocalMode, signOut } = useAuth();
-  const { settings, updateSetting, resetSettings, cloudSaveError } = useSettings(user);
+  const { settings, updateSetting, persistSettings, resetSettings, cloudSaveError } = useSettings(user);
   const { colors, setTheme } = useTheme();
   const { t, language, setLanguage } = useLanguage();
   const { items, addItem } = useItems();
@@ -280,13 +280,20 @@ const Settings = () => {
     setLanguage(nextLanguage);
   };
 
-  const handleThemeChange = (e) => {
+  const handleThemeChange = async (e) => {
     const newTheme = e.target.value;
+    const nextSettings = { ...settings, theme: newTheme };
     updateSetting('theme', newTheme);
-    setTheme(newTheme === 'system' ?
-      (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') :
-      newTheme
-    );
+    const resolvedTheme = newTheme === 'system'
+      ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+      : newTheme;
+    localStorage.setItem('appTheme', resolvedTheme);
+    setTheme(resolvedTheme);
+    try {
+      await persistSettings(nextSettings);
+    } catch (error) {
+      console.error('Could not save theme preference to the cloud:', error);
+    }
   };
 
   const handleNotificationToggle = async (event) => {

@@ -40,7 +40,7 @@ export default function BottomNav() {
         paddingBottom: 'env(safe-area-inset-bottom)',
       }}
     >
-      <div
+      <div className="bottom-nav-bar"
         style={{
           background: isDark ? colors.cardBg : '#FDFBF9',
           borderTop: `1px solid ${isDark ? '#3A2D24' : '#E8DDD0'}`,

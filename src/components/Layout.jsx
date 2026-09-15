@@ -8,7 +8,6 @@ import { useSettings } from '../hooks/useSettings';
 import { useLanguage } from '../context/LanguageContext';
 import { listenForForegroundMessages, sendTestNotification } from '../services/notificationService';
 import { supabase } from '../services/supabaseClient';
-import PageSkeleton from './PageSkeleton';
 import OnboardingTour from './OnboardingTour';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -24,7 +23,7 @@ import {
 
 export default function Layout() {
   const location = useLocation();
-  const { items, loading, addDebugSampleItems } = useItems();
+  const { items, addDebugSampleItems } = useItems();
   const { colors, theme } = useTheme();
   const { user, signOut, isLocalMode } = useAuth();
   const { settings } = useSettings(user);
@@ -305,7 +304,7 @@ export default function Layout() {
       transition: 'background-color 0.3s ease',
     }}>
       {/* ─── APP HEADER ─── */}
-      <div style={{
+      <div className="app-header" style={{
         padding: '12px 20px 8px 20px',
         paddingTop: 'max(16px, env(safe-area-inset-top))',
         display: 'flex',
@@ -315,11 +314,11 @@ export default function Layout() {
         maxWidth: '480px',
         margin: '0 auto',
       }}>
-        <div>
+        <div className="app-header-brand">
           {/* ─── TITLE + BETA ─── */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <h1 style={{
-              fontSize: '22px',
+            <h1 className="app-header-title" style={{
+              fontSize: '28px',
               margin: 0,
               color: colors.textPrimary,
               fontWeight: 700,
@@ -376,10 +375,10 @@ export default function Layout() {
           </p>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <div className="app-header-actions" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           {/* ─── User Info ─── */}
           {user && (
-            <div style={{
+            <div className="app-header-user" style={{
               order: 1,
               display: 'flex',
               alignItems: 'center',
@@ -423,6 +422,7 @@ export default function Layout() {
 
           {/* ─── Notification Bell ─── */}
           <button
+            className="app-header-notifications"
             type="button"
             data-tour="tour-notifications"
             aria-label="Open notifications"
@@ -485,6 +485,7 @@ export default function Layout() {
             )}
           </button>
           <button
+            className="app-header-tour"
             type="button"
             aria-label="Open app tour"
             title="How BarKyanLal works"
@@ -788,7 +789,7 @@ export default function Layout() {
         maxWidth: '480px', 
         margin: '0 auto',
       }}>
-        {loading ? <PageSkeleton colors={colors} /> : <Outlet />}
+        <Outlet />
       </main>
 
       {/* ─── BOTTOM NAV ─── */}
