@@ -22,7 +22,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { useItems } from '../context/ItemContext';
 import { useLanguage } from '../context/LanguageContext';
-import { getIngredientNameMM } from '../data/ingredients';
+import { getIngredientNameMM, getIngredientNameEN } from '../data/ingredients';
 import { generateRecipes } from '../services/recipeService';
 import './Home.css';
 
@@ -138,7 +138,7 @@ export default function Home() {
     )
   );
 
-  const getDisplayName = (name) => language === 'mm' ? getIngredientNameMM(name) : name;
+  const getDisplayName = (name) => language === 'mm' ? getIngredientNameMM(name) : getIngredientNameEN(name);
 
   // ─── Search results for display ───
   const searchResults = searchTerm ? filteredItems : [];

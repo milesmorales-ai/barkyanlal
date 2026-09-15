@@ -39,7 +39,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { useItems } from '../context/ItemContext';
 import { useLanguage } from '../context/LanguageContext';
-import { CATEGORIES, getIngredientNameMM } from '../data/ingredients';
+import { CATEGORIES, getIngredientNameMM, getIngredientNameEN } from '../data/ingredients';
 import { 
   getExpiryStatus, 
   getUrgencyColor, 
@@ -212,7 +212,7 @@ export default function Storage() {
     return language === 'mm' ? cat?.labelMM || category || 'အထွေထွေ' : cat?.label || category || 'General';
   };
 
-  const getDisplayName = (name) => language === 'mm' ? getIngredientNameMM(name) : name;
+  const getDisplayName = (name) => language === 'mm' ? getIngredientNameMM(name) : getIngredientNameEN(name);
   const getLocationLabel = (location) => locations.find(item => item.id === location)?.label || location;
   const localizeExpiryOption = (option) => {
     if (language !== 'mm') return option;

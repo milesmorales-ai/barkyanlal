@@ -13,6 +13,7 @@ import {
   translateGeneratedRecipe,
   askCookingAssistant,
 } from '../services/recipeService';
+import { getCanonicalIngredientName, ingredientsMatch } from '../data/ingredients';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -402,20 +403,13 @@ export default function Recipes() {
 
 
   const normalizePantryName = (item) => {
-    const name = item.normalizedName?.toLowerCase().trim() || item.name?.toLowerCase().trim() || '';
-    const aliases = {
-      'ကြက်သား': 'chicken',
-      'kyat thar': 'chicken',
-      'ဝက်သား': 'pork',
-      'အမဲသား': 'beef',
-    };
-    return aliases[name] || name;
+    return getCanonicalIngredientName(item.normalizedName || item.name || '');
   };
 
   const isIngredientAvailable = (ingredient) => {
 
-    const name = getIngredientName(ingredient).toLowerCase().trim();
-    const matchingName = String(ingredient?.originalName || name).toLowerCase().trim();
+    const name = getCanonicalIngredientName(getIngredientName(ingredient));
+    const matchingName = getCanonicalIngredientName(ingredient?.originalName || name);
 
     if (!name) {
       return false;
@@ -425,10 +419,7 @@ export default function Recipes() {
 
       const itemName = normalizePantryName(item);
 
-      return (
-        itemName.includes(matchingName) ||
-        matchingName.includes(itemName)
-      );
+      return ingredientsMatch(itemName, matchingName);
     });
 
     if (existsInInventory) return true;
@@ -449,11 +440,11 @@ export default function Recipes() {
 
   const getUsedInventoryItems = (recipe) => (recipe?.ingredients || [])
     .map((ingredient) => {
-      const name = getIngredientName(ingredient).toLowerCase().trim();
+      const name = getCanonicalIngredientName(getIngredientName(ingredient));
       if (!name || isPantryStaple(name)) return null;
       return items.find((item) => {
         const itemName = normalizePantryName(item);
-        return itemName.includes(name) || name.includes(itemName);
+        return ingredientsMatch(itemName, name);
       }) || null;
     })
     .filter((item, index, allItems) => item && allItems.findIndex((candidate) => candidate.id === item.id) === index);
@@ -477,8 +468,8 @@ export default function Recipes() {
 
     const removedNames = new Set(removedItems.map((item) => normalizePantryName(item)));
     const updatedIngredients = selectedRecipe.ingredients?.map((ingredient) => {
-      const ingredientName = getIngredientName(ingredient).toLowerCase().trim();
-      const wasRemoved = [...removedNames].some((itemName) => itemName.includes(ingredientName) || ingredientName.includes(itemName));
+      const ingredientName = getCanonicalIngredientName(getIngredientName(ingredient));
+      const wasRemoved = [...removedNames].some((itemName) => ingredientsMatch(itemName, ingredientName));
       return wasRemoved && typeof ingredient === 'object'
         ? { ...ingredient, available: false }
         : ingredient;
@@ -517,20 +508,14 @@ export default function Recipes() {
       return true;
     }
 
-    const main =
-      recipe.mainIngredient
-        .toLowerCase()
-        .trim();
+    const main = getCanonicalIngredientName(recipe.mainIngredient);
 
     return items.some(item => {
 
       const itemName =
         normalizePantryName(item);
 
-      return (
-        itemName.includes(main) ||
-        main.includes(itemName)
-      );
+      return ingredientsMatch(itemName, main);
     });
   };
 

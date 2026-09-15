@@ -2,6 +2,7 @@
 
 import Papa from 'papaparse';
 import { supabase } from './supabaseClient';
+import { getCanonicalIngredientName, getIngredientNameEN } from '../data/ingredients';
 
 // ============================================================
 // CONFIG
@@ -93,8 +94,8 @@ const tokenize = value => {
 // ============================================================
 
 const ingredientsMatch = (inventoryName, recipeName) => {
-  const inventory = tokenize(inventoryName);
-  const recipe = tokenize(recipeName);
+  const inventory = tokenize(getCanonicalIngredientName(inventoryName));
+  const recipe = tokenize(getCanonicalIngredientName(recipeName));
 
   if (!inventory.length || !recipe.length) {
     return false;
@@ -1289,7 +1290,10 @@ const translateBurmeseItems = async (items) => {
 
   for (const item of items) {
     const name = String(item?.normalizedName || item?.name || '').trim();
-    const result = await translateFoodName(name, item.category);
+    const mappedName = getIngredientNameEN(name);
+    const result = mappedName !== name
+      ? { name: mappedName, category: item.category }
+      : await translateFoodName(name, item.category);
     translated.push({ ...item, name: result.name || name, normalizedName: result.name || name });
   }
 

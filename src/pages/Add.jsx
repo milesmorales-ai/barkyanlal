@@ -29,7 +29,7 @@ import {
   faBoxOpen,
   faStoreAlt,
 } from '@fortawesome/free-solid-svg-icons';
-import { INGREDIENTS, CATEGORIES, getIngredientNameMM } from '../data/ingredients';
+import { INGREDIENTS, CATEGORIES, getIngredientNameMM, getIngredientNameEN } from '../data/ingredients';
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
 import './Add.css';
@@ -369,9 +369,11 @@ export default function Add() {
   };
 
   const saveTranslatedItem = async (item) => {
+    const canonicalName = getIngredientNameEN(item.name);
     await addItem({
       ...item,
-      normalizedName: item.name,
+      name: canonicalName,
+      normalizedName: canonicalName,
       category: item.category,
     });
   };

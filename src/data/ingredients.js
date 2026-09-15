@@ -920,16 +920,46 @@ export const CATEGORIES = [
 // Get Burmese display name.
 // Falls back to English if a translation doesn't exist.
 export const getIngredientNameMM = (name) => {
-  return INGREDIENT_NAMES_MM[name] || name;
+  const englishName = String(name || '').trim();
+  return INGREDIENT_NAMES_MM[englishName]
+    || INGREDIENT_NAMES_MM[Object.keys(INGREDIENT_NAMES_MM).find((key) => key.toLowerCase() === englishName.toLowerCase())]
+    || englishName;
 };
 
 
 // Get English name from Burmese name.
 // Useful later if you allow Burmese search/input.
 export const getIngredientNameEN = (burmeseName) => {
+  const name = String(burmeseName || '').trim();
   const entry = Object.entries(INGREDIENT_NAMES_MM).find(
-    ([, value]) => value === burmeseName
+    ([, value]) => value === name
   );
 
-  return entry ? entry[0] : burmeseName;
+  return entry ? entry[0] : name;
+};
+
+const INGREDIENT_ALIASES = {
+  'ကြက်သား': 'chicken',
+  'ကြက်ပေါင်': 'chicken',
+  'ကြက်တောင်ပံ': 'chicken',
+  'ကြက်ရင်အုံ': 'chicken',
+  'chicken thigh': 'chicken',
+  'chicken leg': 'chicken',
+  'chicken wing': 'chicken',
+  'chicken breast': 'chicken',
+  'ခရမ်းချဉ်သီး': 'tomato',
+  'tomatoes': 'tomato',
+};
+
+export const getCanonicalIngredientName = (value) => {
+  const name = getIngredientNameEN(value).toLowerCase().trim();
+  return INGREDIENT_ALIASES[name] || name;
+};
+
+export const ingredientsMatch = (inventoryName, recipeName) => {
+  const inventory = getCanonicalIngredientName(inventoryName);
+  const recipe = getCanonicalIngredientName(recipeName);
+  if (!inventory || !recipe) return false;
+  if (inventory === recipe) return true;
+  return inventory.includes(recipe) || recipe.includes(inventory);
 };
